@@ -5,6 +5,11 @@ import {
 } from "puppeteer-core/lib/esm/puppeteer/puppeteer-core-browser.js";
 
 let pageControllers = [];
+const xpaths = {
+  skipBtn:
+    "//button[(@class='ytp-skip-ad-button') and (contains(@id, 'skip-button'))]",
+  settingBtn: "//button[(contains(@class, 'ytp-settings-button'))]",
+};
 
 class PageController {
   constructor(tabId) {
@@ -26,6 +31,21 @@ class PageController {
       this.page = page;
     } catch (err) {
       console.log("Error during PageController init:", err);
+    }
+  }
+
+  /**
+   * Clicks the skip ad button using xpath
+   */
+  async clickSkipAd() {
+    try {
+      const skipBtn = await this.page.waitForSelector(
+        `::-p-xpath(${xpaths.skipBtn})`,
+        { visible: true }
+      );
+      await skipBtn.click();
+    } catch (err) {
+      console.log("Error while clicking skip button:", err);
     }
   }
 
@@ -72,6 +92,8 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     try {
       //get controller obj
       const pageController = await getPageController(sender.tab.id);
+      //click the skip ad button
+      await pageController.clickSkipAd();
       // close controller obj
       await pageController.close();
       console.log("Controller closed"); //logging
@@ -88,3 +110,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     return true;
   }
 });
+
+// TODO1: handle second ad
+// TODO2: handle sendResponse
