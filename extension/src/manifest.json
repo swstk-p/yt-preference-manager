@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "YouTube videos preference manager",
+    "version": "1.0.0",
+    "description": "A chrome extension to manage your preferences for YouTube videos.",
+    "content_scripts": [{
+        "matches": ["https://*.youtube.com/*"],
+        "js": ["./content.js"],
+        "type": "module"
+    }],
+    "action": {
+        "default_popup": "../index.html"
+    }
+}
