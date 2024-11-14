@@ -7,7 +7,7 @@ import {
 let pageControllers = [];
 const xpaths = {
   skipBtn:
-    "//button[(@class='ytp-skip-ad-button') and (contains(@id, 'skip-button'))]",
+    "//button[(contains(@class, 'ytp-skip-ad-button')) and (contains(@id, 'skip-button'))]",
   settingBtn: "//button[(contains(@class, 'ytp-settings-button'))]",
 };
 
@@ -90,26 +90,35 @@ async function getPageController(tabId) {
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.event === "skipAd") {
     try {
+      console.log("ReqCount:", request.reqCount); //logging
+
       //get controller obj
       const pageController = await getPageController(sender.tab.id);
       //click the skip ad button
       await pageController.clickSkipAd();
-      // close controller obj
-      await pageController.close();
-      console.log("Controller closed"); //logging
       //removes controller obj from the controller array
       pageControllers = pageControllers.filter(
         (controller) => controller.tabId !== sender.tab.id
       );
-      console.log("pageController removed"); //logging
+      console.log("pageController removed:", request.reqCount); //logging
+      // close controller obj
+      console.log("Controller closed"); //logging
+      pageController.close().then(() => {
+        chrome.tabs.sendMessage(sender.tab.id, { msg: "adSkipped" });
+      });
+      //sendResponse didn't work asynchronously
       sendResponse({ success: true });
+      //sending message to tab that the ad has been skipped
+      return true;
     } catch (err) {
       console.log("Err while skipping ad:", err); //logging
       sendResponse({ success: false });
+      return true;
     }
-    return true;
   }
 });
 
-// TODO1: handle second ad
-// TODO2: handle sendResponse
+/*
+TODO1: handle second ad
+TODO2: handle sendResponse or send new message
+ */
