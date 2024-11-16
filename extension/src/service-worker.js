@@ -117,8 +117,3 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     }
   }
 });
-
-/*
-TODO1: handle second ad
-TODO2: handle sendResponse or send new message
- */
