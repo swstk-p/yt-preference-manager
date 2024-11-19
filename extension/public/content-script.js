@@ -1,5 +1,4 @@
 console.log("IN PREFERENCE MANAGER");
-
 const xpaths = {
   skipBtn:
     "//button[(contains(@class, 'ytp-skip-ad-button')) and (contains(@id, 'skip-button'))]",
@@ -10,7 +9,8 @@ const xpaths = {
   fullModeBtn:
     "//button[(contains(@class, 'ytp-fullscreen-button')) and (@aria-keyshortcuts='f')]",
 };
-
+let vidUrlPattern =
+  /^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+(?:[&?][\w=-]+)*$/;
 const screenModes = { normal: 0, theater: 1, full: 2 };
 const qualities = {
   auto: 0,
@@ -40,7 +40,7 @@ const playbacks = {
 const settings = {
   skipAd: true,
   autoplay: false,
-  screenMode: screenModes.full,
+  screenMode: screenModes.theater,
   quality: qualities.auto,
   timer: timers.off,
   playback: playbacks.normal,
@@ -238,13 +238,15 @@ function handleVideoScreenSize() {
  */
 function handleAllPreferences(mutationsList) {
   //checking that skipAd button has appeared
-  if (settings.skipAd === true) {
-    clickSkipBtn();
+  if (vidUrlPattern.test(location.href)) {
+    if (settings.skipAd === true) {
+      clickSkipBtn();
+    }
+    //handling autoplay
+    handleAutoplayBtn();
+    //handling video screen size
+    handleVideoScreenSize();
   }
-  //handling autoplay
-  handleAutoplayBtn();
-  //handling video screen size
-  handleVideoScreenSize();
 }
 
 function handlePreferencesOnSpecialOccasions() {
@@ -259,8 +261,10 @@ domObserver.observe(document.body, domObserverConfig);
 
 //another observer to specifically observe the youtube video (for screen size)
 const vidObserver = new MutationObserver(() => {
-  console.log("Observing video element"); //logging
-  handleVideoScreenSize();
+  if (vidUrlPattern.test(location.href)) {
+    console.log("Observing video element"); //logging
+    handleVideoScreenSize();
+  }
 });
 const vidElement = document.querySelector("video");
 const vidObserverConfig = { childList: true, subtree: true, attributes: true };
