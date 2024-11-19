@@ -8,6 +8,7 @@ const xpaths = {
     "//button[(contains(@class, 'ytp-size-button')) and (@aria-keyshortcuts='t')]",
   fullModeBtn:
     "//button[(contains(@class, 'ytp-fullscreen-button')) and (@aria-keyshortcuts='f')]",
+  dismissBtn: "//*[@id='dismiss-button']//button[1]",
 };
 let vidUrlPattern =
   /^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+(?:[&?][\w=-]+)*$/;
@@ -44,6 +45,7 @@ const settings = {
   quality: qualities.auto,
   timer: timers.off,
   playback: playbacks.normal,
+  dismissPremiumPopup: true,
 };
 
 let skipReqInProgress = false;
@@ -233,6 +235,26 @@ function handleVideoScreenSize() {
 }
 
 /**
+ * Function to handle the "Youtube Premium" popup based on preferences.
+ */
+function handlePremiumPopup() {
+  if (settings.dismissPremiumPopup) {
+    //get dismiss button
+    const dismissBtn = document.evaluate(
+      xpaths.dismissBtn,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    ).singleNodeValue;
+    if (dismissBtn !== null && dismissBtn !== undefined) {
+      dismissBtn.click();
+      console.log("Premium popup dismissed.");
+    }
+  }
+}
+
+/**
  * Callback function for MutationObserver which handles all preference DOM change.
  * @param {*} mutationsList parameter supplied by MutationObserver
  */
@@ -246,12 +268,15 @@ function handleAllPreferences(mutationsList) {
     handleAutoplayBtn();
     //handling video screen size
     handleVideoScreenSize();
+    //handle premium popup
+    handlePremiumPopup();
   }
 }
 
 function handlePreferencesOnSpecialOccasions() {
   handleAutoplayBtn();
   handleVideoScreenSize();
+  handlePremiumPopup();
 }
 
 //observing DOM mutation to detect all buttons
