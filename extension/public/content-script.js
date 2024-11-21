@@ -9,6 +9,11 @@ const xpaths = {
   fullModeBtn:
     "//button[(contains(@class, 'ytp-fullscreen-button')) and (@aria-keyshortcuts='f')]",
   dismissBtn: "//*[@id='dismiss-button']//button[1]",
+  annotations: {
+    parent: "//div[@class='ytp-menuitem-label' and text()='Annotations']/..",
+    button:
+      "//div[@class='ytp-menuitem-label' and text()='Annotations']/following::div[1]/div",
+  },
 };
 let vidUrlPattern =
   /^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+(?:[&?][\w=-]+)*$/;
@@ -42,10 +47,11 @@ const settings = {
   skipAd: true,
   autoplay: false,
   screenMode: screenModes.theater,
+  dismissPremiumPopup: true,
+  annotations: false,
   quality: qualities.auto,
   timer: timers.off,
   playback: playbacks.normal,
-  dismissPremiumPopup: true,
 };
 
 let skipReqInProgress = false;
@@ -255,6 +261,64 @@ function handlePremiumPopup() {
 }
 
 /**
+ * Function to click the settngs button in a YT video.
+ */
+
+function clickSettingsBtn() {
+  const btn = document.evaluate(
+    xpaths.settingBtn,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  ).singleNodeValue;
+  if (btn !== null && btn !== undefined) {
+    btn.click();
+  }
+}
+
+/**
+ * Function to handle the annotations.
+ */
+function handleAnnotations() {
+  clickSettingsBtn();
+  //getting the annotations state - i.e. on or off
+  const annotationsParent = document.evaluate(
+    xpaths.annotations.parent,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  ).singleNodeValue;
+  // TODO 1: Check this error
+  const annotationsState =
+    annotationsParent !== null || annotationsParent !== undefined
+      ? annotationsParent.getAttribute("aria-checked")
+      : null;
+  //if changing annotations state is necessary
+  if (
+    (settings.annotations == true &&
+      annotationsState !== "true" &&
+      annotationsState !== null &&
+      annotationsState !== undefined) ||
+    (settings.annotations == false &&
+      annotationsState !== "false" &&
+      annotationsState !== null &&
+      annotationsState !== undefined)
+  ) {
+    const annotationsBtn = document.evaluate(
+      xpaths.annotations.button,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    ).singleNodeValue;
+    annotationsBtn.click();
+    clickSettingsBtn(); //closing the settings button
+  }
+}
+
+/**
  * Callback function for MutationObserver which handles all preference DOM change.
  * @param {*} mutationsList parameter supplied by MutationObserver
  */
@@ -270,6 +334,8 @@ function handleAllPreferences(mutationsList) {
     handleVideoScreenSize();
     //handle premium popup
     handlePremiumPopup();
+    //handle annotations
+    handleAnnotations();
   }
 }
 
@@ -277,6 +343,7 @@ function handlePreferencesOnSpecialOccasions() {
   handleAutoplayBtn();
   handleVideoScreenSize();
   handlePremiumPopup();
+  handleAnnotations;
 }
 
 //observing DOM mutation to detect all buttons
