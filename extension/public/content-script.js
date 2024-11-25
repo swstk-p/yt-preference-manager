@@ -14,6 +14,11 @@ const xpaths = {
     button:
       "//div[@class='ytp-menuitem-label' and text()='Annotations']/following::div[1]/div",
   },
+  ambientMode: {
+    parent: "//div[@class='ytp-menuitem-label' and text()='Ambient mode']/..",
+    button:
+      "//div[@class='ytp-menuitem-label' and text()='Ambient mode']/following::div[1]/div",
+  },
 };
 let vidUrlPattern =
   /^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+(?:[&?][\w=-]+)*$/;
@@ -49,6 +54,7 @@ const settings = {
   screenMode: screenModes.theater,
   dismissPremiumPopup: true,
   annotations: false,
+  ambientMode: true,
   quality: qualities.auto,
   timer: timers.off,
   playback: playbacks.normal,
@@ -290,7 +296,6 @@ function handleAnnotations() {
     XPathResult.FIRST_ORDERED_NODE_TYPE,
     null
   ).singleNodeValue;
-  // TODO 1: Check this error
   const annotationsState =
     annotationsParent !== null && annotationsParent !== undefined
       ? annotationsParent.getAttribute("aria-checked")
@@ -315,10 +320,49 @@ function handleAnnotations() {
       null
     ).singleNodeValue;
     annotationsBtn.click();
-    clickSettingsBtn(); //closing the settings button
-
     console.log("Annotation clicked.");
   }
+  clickSettingsBtn(); //closing the settings button
+}
+
+/**
+ * Function to handle the ambient mode.
+ */
+function handleAmbientMode() {
+  clickSettingsBtn();
+  //getting the ambient state - i.e. on or off
+  const ambientModeParent = document.evaluate(
+    xpaths.ambientMode.parent,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  ).singleNodeValue;
+  const ambientModeState =
+    ambientModeParent !== null && ambientModeParent !== undefined
+      ? ambientModeParent.getAttribute("aria-checked")
+      : null;
+  //if changing ambient mode state is necessary
+  if (
+    (settings.ambientMode == true &&
+      ambientModeState !== "true" &&
+      ambientModeState !== null &&
+      ambientModeState !== undefined) ||
+    (settings.ambientMode == false &&
+      ambientModeState !== "false" &&
+      ambientModeState !== null &&
+      ambientModeState !== undefined)
+  ) {
+    const ambientModeBtn = document.evaluate(
+      xpaths.ambientMode.button,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    ).singleNodeValue;
+    ambientModeBtn.click();
+  }
+  clickSettingsBtn(); //closing the settings button
 }
 
 /**
@@ -339,6 +383,8 @@ function handleAllPreferences(mutationsList) {
     handlePremiumPopup();
     //handle annotations
     handleAnnotations();
+    //handle ambient mode
+    handleAmbientMode();
   }
 }
 
@@ -347,6 +393,7 @@ function handlePreferencesOnSpecialOccasions() {
   handleVideoScreenSize();
   handlePremiumPopup();
   handleAnnotations();
+  handleAmbientMode();
 }
 
 //observing DOM mutation to detect all buttons
