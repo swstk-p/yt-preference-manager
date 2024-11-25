@@ -292,7 +292,7 @@ function handleAnnotations() {
   ).singleNodeValue;
   // TODO 1: Check this error
   const annotationsState =
-    annotationsParent !== null || annotationsParent !== undefined
+    annotationsParent !== null && annotationsParent !== undefined
       ? annotationsParent.getAttribute("aria-checked")
       : null;
   //if changing annotations state is necessary
@@ -306,6 +306,7 @@ function handleAnnotations() {
       annotationsState !== null &&
       annotationsState !== undefined)
   ) {
+    console.log("Annotations here");
     const annotationsBtn = document.evaluate(
       xpaths.annotations.button,
       document,
@@ -315,6 +316,8 @@ function handleAnnotations() {
     ).singleNodeValue;
     annotationsBtn.click();
     clickSettingsBtn(); //closing the settings button
+
+    console.log("Annotation clicked.");
   }
 }
 
@@ -343,7 +346,7 @@ function handlePreferencesOnSpecialOccasions() {
   handleAutoplayBtn();
   handleVideoScreenSize();
   handlePremiumPopup();
-  handleAnnotations;
+  handleAnnotations();
 }
 
 //observing DOM mutation to detect all buttons
@@ -355,7 +358,7 @@ domObserver.observe(document.body, domObserverConfig);
 const vidObserver = new MutationObserver(() => {
   if (vidUrlPattern.test(location.href)) {
     console.log("Observing video element"); //logging
-    handleVideoScreenSize();
+    handlePreferencesOnSpecialOccasions();
   }
 });
 const vidElement = document.querySelector("video");
