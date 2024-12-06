@@ -19,6 +19,21 @@ const xpaths = {
     button:
       "//div[@class='ytp-menuitem-label' and text()='Ambient mode']/following::div[1]/div",
   },
+  quality:{
+    button:"//div[@class='ytp-menuitem-label' and text()='Quality']",
+    menu: "//div[contains(@class, 'ytp-quality-menu')]",
+    values:{
+      auto:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'Auto')]/../../..",
+      144:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'144p')]/../../..",
+      240:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'240p')]/../../..",
+      360:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'360p')]/../../..",
+      480:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'480p')]/../../..",
+      720:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'720p')]/../../..",
+      1080:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'1080p')]/../../..",
+      1440:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'1440p')]/../../..",
+      2160:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'2160p')]/../../..",
+    }
+  },
 };
 let vidUrlPattern =
   /^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+(?:[&?][\w=-]+)*$/;
@@ -27,11 +42,12 @@ const qualities = {
   auto: 0,
   144: 1,
   240: 2,
-  350: 3,
+  360: 3,
   480: 4,
   720: 5,
   1080: 6,
   1440: 7,
+  2160: 8,
 };
 
 const timers = { off: 0, 10: 1, 20: 2, 30: 3, 45: 4, 60: 5, end: 6 };
@@ -55,7 +71,7 @@ const settings = {
   dismissPremiumPopup: true,
   annotations: false,
   ambientMode: true,
-  quality: qualities.auto,
+  quality: qualities[480],
   timer: timers.off,
   playback: playbacks.normal,
 };
@@ -79,7 +95,6 @@ function clickSkipBtn() {
   console.log("skipReqInProgress:", skipReqInProgress); //logging
   if (node !== null && node !== undefined && !skipReqInProgress) {
     console.log("Valid skip button found"); //logging
-
     reqCount++;
     skipReqInProgress = true;
     chrome.runtime
@@ -280,6 +295,7 @@ function clickSettingsBtn() {
   ).singleNodeValue;
   if (btn !== null && btn !== undefined) {
     btn.click();
+    btn.blur();``
   }
 }
 
@@ -366,6 +382,56 @@ function handleAmbientMode() {
 }
 
 /**
+ * Funtion to handle quality according to preference
+ */
+function handleQuality(){
+  //click settings button
+  clickSettingsBtn();
+  const qualityBtn = document.evaluate(xpaths.quality.button, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  let inQuality = false;
+  //determine if qualityBtn is clicked
+  if(qualityBtn!==null && qualityBtn!==undefined){
+    qualityBtn.click();
+    inQuality=true;
+  }
+  //if btn clicked
+  if(inQuality){
+    //determine if quality menu appears
+    const qualityMenu = document.evaluate("//div[contains(@class, 'ytp-quality-menu')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    //if quality menu appears
+    if(qualityMenu!==null && qualityMenu!==undefined){
+      let qualitySet = false; //if we have already set quality
+      let qualityValue = settings.quality; //value from qualities obj
+      //while we have not set quality
+      while(qualitySet!==true){
+        //get preference through quality value and button
+        const qualityPreference = Object.keys(qualities).find(key=>qualities[key]==qualityValue);
+        const qualityPreferenceBtn = document.evaluate(xpaths.quality.values[qualityPreference], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        //if button not found, decrease quality
+        if(qualityPreferenceBtn===null || qualityPreferenceBtn===undefined){
+          qualityValue-=1;
+          continue;
+        }
+        //if quality is already equal to preference
+        if(qualityPreferenceBtn.getAttribute('aria-checked')==="true"){
+          qualitySet = true;
+          continue
+        }
+        //set quality if quality is not equal to preference
+        else if(qualityPreferenceBtn.getAttribute('aria-checked')==="false"){
+          qualityPreferenceBtn.click();
+          qualitySet = true;
+          continue;
+        }
+      }      
+    }
+  }
+  //close settings button
+  clickSettingsBtn()
+}
+    
+
+/**
  * Callback function for MutationObserver which handles all preference DOM change.
  * @param {*} mutationsList parameter supplied by MutationObserver
  */
@@ -385,15 +451,21 @@ function handleAllPreferences(mutationsList) {
     handleAnnotations();
     //handle ambient mode
     handleAmbientMode();
+    //handle quality
+    handleQuality();
   }
 }
 
+/**
+ * Function to handle preferences excluding skip Ad
+ */
 function handlePreferencesOnSpecialOccasions() {
   handleAutoplayBtn();
   handleVideoScreenSize();
   handlePremiumPopup();
   handleAnnotations();
   handleAmbientMode();
+  handleQuality();
 }
 
 //observing DOM mutation to detect all buttons
