@@ -34,6 +34,20 @@ const xpaths = {
       2160:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'2160p')]/../../..",
     }
   },
+  sleepTimer:{
+    button:"//div[@class='ytp-menuitem-label' and text()='Sleep timer']",
+    menu:"//div[contains(@class, 'ytp-panel')]//span[contains(@class, 'ytp-panel-title') and text()='Sleep timer']",
+    values:{
+      off:"//div[@class='ytp-menuitem-label' and contains(text(),'Off')]/..",
+      10:"//div[@class='ytp-menuitem-label' and contains(text(),'10 minutes')]/..",
+      15:"//div[@class='ytp-menuitem-label' and contains(text(),'15 minutes')]/..",
+      20:"//div[@class='ytp-menuitem-label' and contains(text(),'20 minutes')]/..",
+      30:"//div[@class='ytp-menuitem-label' and contains(text(),'30 minutes')]/..",
+      45:"//div[@class='ytp-menuitem-label' and contains(text(),'45 minutes')]/..",
+      60:"//div[@class='ytp-menuitem-label' and contains(text(),'60 minutes')]/..",
+      end:"//div[contains(text(),'End of video')]/../../..",
+    }
+  }
 };
 let vidUrlPattern =
   /^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+(?:[&?][\w=-]+)*$/;
@@ -50,7 +64,7 @@ const qualities = {
   2160: 8,
 };
 
-const timers = { off: 0, 10: 1, 20: 2, 30: 3, 45: 4, 60: 5, end: 6 };
+const timers = { off: 0, 10: 1, 15:2, 20: 3, 30: 4, 45: 5, 60: 6, end: 7 };
 
 const playbacks = {
   0.25: 0,
@@ -72,13 +86,14 @@ const settings = {
   annotations: false,
   ambientMode: true,
   quality: qualities[2160],
-  timer: timers.off,
+  timer: timers.end,
   playback: playbacks.normal,
 };
 
 let skipReqInProgress = false;
 let reqCount = 0;
 
+//TODO: Handle ads that appear in the middle of a video
 /**
  * Function which checks if the skip button is present.
  */
@@ -407,7 +422,7 @@ function handleQuality(){
   //if btn clicked
   if(inQuality){
     //determine if quality menu appears
-    const qualityMenu = document.evaluate("//div[contains(@class, 'ytp-quality-menu')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    const qualityMenu = document.evaluate(xpaths.quality.menu, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     //if quality menu appears
     if(qualityMenu!==null && qualityMenu!==undefined){
       let qualitySet = false; //if we have already set quality
@@ -439,6 +454,40 @@ function handleQuality(){
   //close settings button
   clickSettingsBtn()
 }
+
+/**
+ * Function to handle sleep timer according to preferences
+ */
+function handleTimer(){
+  //open settings menu
+  clickSettingsBtn();
+  //timer button
+  const timerBtn = document.evaluate(xpaths.sleepTimer.button, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  let inTimer = false;
+  //if timer button clicked, flag up
+  if(timerBtn!==null && timerBtn!==undefined){
+    timerBtn.click();
+    inTimer = true;
+  }
+  //if flag up
+  if(inTimer){
+    //determine if the timer menu is open
+    const timerMenu = document.evaluate(xpaths.sleepTimer.menu, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    //if menu is open
+    if(timerMenu!==null && timerMenu!==undefined){
+      let timerValue = settings.timer;
+      //get timerPreference
+      const timerPreference = Object.keys(timers).find(timer=>timers[timer]==timerValue);
+      //get button for preference
+      const timerPreferenceBtn = document.evaluate(xpaths.sleepTimer.values[timerPreference], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+      if(timerPreferenceBtn!==null && timerPreferenceBtn!==undefined && timerPreferenceBtn.getAttribute('aria-checked')!==null && timerPreferenceBtn.getAttribute("aria-checked")!==undefined && timerPreferenceBtn.getAttribute('aria-checked')==="false" && timerPreferenceBtn.getAttribute('aria-checked')!=="true"){
+        timerPreferenceBtn.click();
+      }
+    }
+  }
+  //close settings menu
+  clickSettingsBtn();
+}
     
 
 /**
@@ -463,6 +512,8 @@ function handleAllPreferences(mutationsList) {
     handleAmbientMode();
     //handle quality
     handleQuality();
+    //handle sleep timer
+    handleTimer();
     //close settings if still open
     closeSettingsMenu();
   }
@@ -478,6 +529,7 @@ function handlePreferencesOnSpecialOccasions() {
   handleAnnotations();
   handleAmbientMode();
   handleQuality();
+  handleTimer();
   closeSettingsMenu();
 }
 
