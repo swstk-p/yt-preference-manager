@@ -71,7 +71,7 @@ const settings = {
   dismissPremiumPopup: true,
   annotations: false,
   ambientMode: true,
-  quality: qualities[480],
+  quality: qualities[2160],
   timer: timers.off,
   playback: playbacks.normal,
 };
@@ -300,6 +300,16 @@ function clickSettingsBtn() {
 }
 
 /**
+ * Function to click the settings button if the settings menu is still open.
+ */
+function closeSettingsMenu(){
+  const btn = document.evaluate(xpaths.settingsBtn, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  if(btn!==null && btn!==undefined && btn.getAttribute('aria-expanded')!==null && btn.getAttribute('aria-expanded')!==undefined && btn.getAttribute('aria-expanded')==="true" && btn.getAttribute('aria-expanded')!=="false"){
+    btn.click();
+  }
+}
+
+/**
  * Function to handle the annotations.
  */
 function handleAnnotations() {
@@ -453,6 +463,8 @@ function handleAllPreferences(mutationsList) {
     handleAmbientMode();
     //handle quality
     handleQuality();
+    //close settings if still open
+    closeSettingsMenu();
   }
 }
 
@@ -466,6 +478,7 @@ function handlePreferencesOnSpecialOccasions() {
   handleAnnotations();
   handleAmbientMode();
   handleQuality();
+  closeSettingsMenu();
 }
 
 //observing DOM mutation to detect all buttons
