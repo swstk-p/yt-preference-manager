@@ -47,6 +47,20 @@ const xpaths = {
       60:"//div[@class='ytp-menuitem-label' and contains(text(),'60 minutes')]/..",
       end:"//div[contains(text(),'End of video')]/../../..",
     }
+  },
+  playback:{
+    button:"//div[@class='ytp-menuitem-label' and text()='Playback speed']",
+    menu:"//div[contains(@class, 'ytp-panel')]//span[contains(@class, 'ytp-panel-title') and text()='Playback speed']",
+    values:{
+      0.25:"//div[@class='ytp-menuitem-label' and contains(text(),'0.25')]/..",
+      0.5:"//div[@class='ytp-menuitem-label' and contains(text(),'0.5')]/..",
+      0.75:"//div[@class='ytp-menuitem-label' and contains(text(),'0.75')]/..",
+      Normal:"//div[@class='ytp-menuitem-label' and contains(text(),'Normal')]/..",
+      1.25:"//div[@class='ytp-menuitem-label' and contains(text(),'1.25')]/..",
+      1.5:"//div[@class='ytp-menuitem-label' and contains(text(),'1.5')]/..",
+      1.75:"//div[@class='ytp-menuitem-label' and contains(text(),'1.75')]/..",
+      2:"//div[@class='ytp-menuitem-label' and contains(text(),'2')]/..",
+    }
   }
 };
 let vidUrlPattern =
@@ -71,11 +85,10 @@ const playbacks = {
   0.5: 1,
   0.75: 2,
   normal: 3,
-  1: 4,
-  1.25: 5,
-  1.5: 6,
-  1.75: 7,
-  2: 8,
+  1.25: 4,
+  1.5: 5,
+  1.75: 6,
+  2: 7,
 };
 
 const settings = {
@@ -87,7 +100,7 @@ const settings = {
   ambientMode: true,
   quality: qualities[2160],
   timer: timers.end,
-  playback: playbacks.normal,
+  playback: playbacks["0.75"],
 };
 
 let skipReqInProgress = false;
@@ -488,7 +501,36 @@ function handleTimer(){
   //close settings menu
   clickSettingsBtn();
 }
-    
+
+function handlePlayback(){
+  //click settings btn
+  clickSettingsBtn();
+  const playbackBtn = document.evaluate(xpaths.playback.button, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  let inPlayback = false;
+  //if playback button clicked, flag up
+  if(playbackBtn!==null && playbackBtn!==undefined){
+    playbackBtn.click();
+    inPlayback = true;
+  }
+  //if flag up
+  if(inPlayback){
+    //determine if the playback menu is open
+    const playbackMenu = document.evaluate(xpaths.playback.menu, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    //if menu is open
+    if(playbackMenu!==null && playbackMenu!==undefined){
+      let playbackValue = settings.playback;
+      //get playback preference
+      const playbackPreference = Object.keys(playbacks).find(key=>playbacks[key]===playbackValue);
+      //get button for preference
+      const playbackPreferenceBtn = document.evaluate(xpaths.playback.values[playbackPreference], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+      if(playbackPreferenceBtn!=+null && playbackPreferenceBtn!==undefined && playbackPreferenceBtn.getAttribute("aria-checked")!==null && playbackPreferenceBtn.getAttribute("aria-checked")!==undefined && playbackPreferenceBtn.getAttribute("aria-checked")==="false" && playbackPreferenceBtn.getAttribute("aria-checked")!=="true"){
+        playbackPreferenceBtn.click();
+      }
+    }
+  }
+  //close settings button
+  clickSettingsBtn();
+}
 
 /**
  * Callback function for MutationObserver which handles all preference DOM change.
@@ -514,6 +556,8 @@ function handleAllPreferences(mutationsList) {
     handleQuality();
     //handle sleep timer
     handleTimer();
+    //handle playback
+    handlePlayback();
     //close settings if still open
     closeSettingsMenu();
   }
@@ -530,6 +574,7 @@ function handlePreferencesOnSpecialOccasions() {
   handleAmbientMode();
   handleQuality();
   handleTimer();
+  handlePlayback();
   closeSettingsMenu();
 }
 
