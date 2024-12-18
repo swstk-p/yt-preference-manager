@@ -1,4 +1,3 @@
-console.log("IN PREFERENCE MANAGER");
 const xpaths = {
   skipBtn:
     "//button[(contains(@class, 'ytp-skip-ad-button')) and (contains(@id, 'skip-button'))]",
@@ -91,18 +90,7 @@ const playbacks = {
   2: 7,
 };
 
-const settings = {
-  skipAd: true,
-  autoplay: false,
-  screenMode: screenModes.theater,
-  dismissPremiumPopup: true,
-  annotations: false,
-  ambientMode: true,
-  quality: qualities[2160],
-  timer: timers.end,
-  playback: playbacks["0.75"],
-};
-
+let settings = null;
 let skipReqInProgress = false;
 let reqCount = 0;
 
@@ -111,7 +99,6 @@ let reqCount = 0;
  * Function which checks if the skip button is present.
  */
 function clickSkipBtn() {
-  console.log("DOM changed."); //logging
   const node = document.evaluate(
     xpaths.skipBtn,
     document,
@@ -119,16 +106,12 @@ function clickSkipBtn() {
     XPathResult.FIRST_ORDERED_NODE_TYPE,
     null
   ).singleNodeValue;
-  console.log("Node:", node); //logging
-  console.log("skipReqInProgress:", skipReqInProgress); //logging
   if (node !== null && node !== undefined && !skipReqInProgress) {
-    console.log("Valid skip button found"); //logging
     reqCount++;
     skipReqInProgress = true;
     chrome.runtime
       .sendMessage({ event: "skipAd", reqCount: reqCount })
       .then((res) => {
-        console.log("SkipAd res:", res);
       })
       .catch((err) => {
         console.log(err);
@@ -210,7 +193,6 @@ function handleVideoScreenSize() {
             cancelable: false,
           });
           fullModeNode.dispatchEvent(clickEvent);
-          console.log("Clicked to exit full screen for normal"); //logging
         }
       }
       //click if video is not in normal mode
@@ -222,7 +204,6 @@ function handleVideoScreenSize() {
       ) {
         {
           theaterModeNode.click();
-          console.log("Clicked to exit theater mode for normal"); //logging
         }
       }
       break;
@@ -236,7 +217,6 @@ function handleVideoScreenSize() {
       ) {
         {
           fullModeNode.click();
-          console.log("Clicked to exit full screen for theater"); //logging
         }
       }
       //click if video is not in theater mode
@@ -248,7 +228,6 @@ function handleVideoScreenSize() {
       ) {
         {
           theaterModeNode.click();
-          console.log("Clicked to enter theater for theater"); //logging
         }
       }
       break;
@@ -262,7 +241,6 @@ function handleVideoScreenSize() {
       ) {
         {
           theaterModeNode.click();
-          console.log("Clicked to exit theater for full screen"); //logging
         }
       }
       //get full screen element if any
@@ -271,7 +249,6 @@ function handleVideoScreenSize() {
         document.webkitFullscreenElement ||
         document.mozFullScreenElement ||
         document.msFullscreenElement;
-      console.log("isInFullScreen:", isInFullScreen);
       //click full screen if video is not in full screen
       if (
         fullModeNode !== null &&
@@ -282,7 +259,6 @@ function handleVideoScreenSize() {
       ) {
         {
           fullModeNode.click();
-          console.log("Clicked to enter full screen for full screen"); //logging
         }
       }
       break;
@@ -304,7 +280,6 @@ function handlePremiumPopup() {
     ).singleNodeValue;
     if (dismissBtn !== null && dismissBtn !== undefined) {
       dismissBtn.click();
-      console.log("Premium popup dismissed.");
     }
   }
 }
@@ -365,7 +340,6 @@ function handleAnnotations() {
       annotationsState !== null &&
       annotationsState !== undefined)
   ) {
-    console.log("Annotations here");
     const annotationsBtn = document.evaluate(
       xpaths.annotations.button,
       document,
@@ -374,7 +348,6 @@ function handleAnnotations() {
       null
     ).singleNodeValue;
     annotationsBtn.click();
-    console.log("Annotation clicked.");
   }
   clickSettingsBtn(); //closing the settings button
 }
@@ -523,7 +496,7 @@ function handlePlayback(){
       const playbackPreference = Object.keys(playbacks).find(key=>playbacks[key]===playbackValue);
       //get button for preference
       const playbackPreferenceBtn = document.evaluate(xpaths.playback.values[playbackPreference], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-      if(playbackPreferenceBtn!=+null && playbackPreferenceBtn!==undefined && playbackPreferenceBtn.getAttribute("aria-checked")!==null && playbackPreferenceBtn.getAttribute("aria-checked")!==undefined && playbackPreferenceBtn.getAttribute("aria-checked")==="false" && playbackPreferenceBtn.getAttribute("aria-checked")!=="true"){
+      if(playbackPreferenceBtn!==null && playbackPreferenceBtn!==undefined && playbackPreferenceBtn.getAttribute("aria-checked")!==null && playbackPreferenceBtn.getAttribute("aria-checked")!==undefined && playbackPreferenceBtn.getAttribute("aria-checked")==="false" && playbackPreferenceBtn.getAttribute("aria-checked")!=="true"){
         playbackPreferenceBtn.click();
       }
     }
@@ -538,7 +511,7 @@ function handlePlayback(){
  */
 function handleAllPreferences(mutationsList) {
   //checking that skipAd button has appeared
-  if (vidUrlPattern.test(location.href)) {
+  if (vidUrlPattern.test(location.href) && settings!==null) {
     if (settings.skipAd === true) {
       clickSkipBtn();
     }
@@ -567,15 +540,17 @@ function handleAllPreferences(mutationsList) {
  * Function to handle preferences excluding skip Ad
  */
 function handlePreferencesOnSpecialOccasions() {
-  handleAutoplayBtn();
-  handleVideoScreenSize();
-  handlePremiumPopup();
-  handleAnnotations();
-  handleAmbientMode();
-  handleQuality();
-  handleTimer();
-  handlePlayback();
-  closeSettingsMenu();
+  if(settings!==null){
+    handleAutoplayBtn();
+    handleVideoScreenSize();
+    handlePremiumPopup();
+    handleAnnotations();
+    handleAmbientMode();
+    handleQuality();
+    handleTimer();
+    handlePlayback();
+    closeSettingsMenu();
+  }
 }
 
 //observing DOM mutation to detect all buttons
@@ -586,7 +561,6 @@ domObserver.observe(document.body, domObserverConfig);
 //another observer to specifically observe the youtube video (for screen size)
 const vidObserver = new MutationObserver(() => {
   if (vidUrlPattern.test(location.href)) {
-    console.log("Observing video element"); //logging
     handlePreferencesOnSpecialOccasions();
   }
 });
@@ -596,11 +570,27 @@ if (vidElement) {
   vidObserver.observe(vidElement, vidObserverConfig);
 }
 
+if(vidUrlPattern.test(location.href)){
+  chrome.runtime.sendMessage({action:"askSettings"}).then((res)=>{
+    if(res.settings!==null && res.settings!==undefined){
+      settings = res.settings;
+    }
+  })
+  .catch((err)=>{console.log(err);
+  })
+}
+
 //receiving the message that ad has been skipped
 chrome.runtime.onMessage.addListener((request, response, sendResponse) => {
-  if ({ msg: "adSkipped" }) {
-    console.log("adSkipped msg"); //logging
+  if (request.msg === "adSkipped" ) {
     skipReqInProgress = false;
     handlePreferencesOnSpecialOccasions();
   }
 });
+
+//receiving settings from service worker
+chrome.runtime.onMessage.addListener((request, response, sendResponse)=>{
+  if(request.action==="sendSettings"){
+    settings = request.settings;
+  }
+})
