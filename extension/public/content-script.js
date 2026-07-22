@@ -18,49 +18,47 @@ const xpaths = {
     button:
       "//div[@class='ytp-menuitem-label' and text()='Ambient mode']/following::div[1]/div",
   },
-  quality:{
-    button:"//div[@class='ytp-menuitem-label' and text()='Quality']",
+  quality: {
+    button: "//div[@class='ytp-menuitem-label' and text()='Quality']",
     menu: "//div[contains(@class, 'ytp-quality-menu')]",
-    values:{
-      auto:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'Auto')]/../../..",
-      144:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'144p')]/../../..",
-      240:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'240p')]/../../..",
-      360:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'360p')]/../../..",
-      480:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'480p')]/../../..",
-      720:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'720p')]/../../..",
-      1080:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'1080p')]/../../..",
-      1440:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'1440p')]/../../..",
-      2160:"//div[@class='ytp-menuitem-label']/div/span[contains(text(),'2160p')]/../../..",
-    }
+    values: {
+      auto: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'Auto')]/../../..",
+      144: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'144p')]/../../..",
+      240: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'240p')]/../../..",
+      360: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'360p')]/../../..",
+      480: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'480p')]/../../..",
+      720: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'720p')]/../../..",
+      1080: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'1080p')]/../../..",
+      1440: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'1440p')]/../../..",
+      2160: "//div[@class='ytp-menuitem-label']/div/span[contains(text(),'2160p')]/../../..",
+    },
   },
-  sleepTimer:{
-    button:"//div[@class='ytp-menuitem-label' and text()='Sleep timer']",
-    menu:"//div[contains(@class, 'ytp-panel')]//span[contains(@class, 'ytp-panel-title') and text()='Sleep timer']",
-    values:{
-      off:"//div[@class='ytp-menuitem-label' and contains(text(),'Off')]/..",
-      10:"//div[@class='ytp-menuitem-label' and contains(text(),'10 minutes')]/..",
-      15:"//div[@class='ytp-menuitem-label' and contains(text(),'15 minutes')]/..",
-      20:"//div[@class='ytp-menuitem-label' and contains(text(),'20 minutes')]/..",
-      30:"//div[@class='ytp-menuitem-label' and contains(text(),'30 minutes')]/..",
-      45:"//div[@class='ytp-menuitem-label' and contains(text(),'45 minutes')]/..",
-      60:"//div[@class='ytp-menuitem-label' and contains(text(),'60 minutes')]/..",
-      end:"//div[contains(text(),'End of video')]/../../..",
-    }
+  sleepTimer: {
+    button: "//div[@class='ytp-menuitem-label' and text()='Sleep timer']",
+    menu: "//div[contains(@class, 'ytp-panel')]//span[contains(@class, 'ytp-panel-title') and text()='Sleep timer']",
+    values: {
+      off: "//div[@class='ytp-menuitem-label' and contains(text(),'Off')]/..",
+      10: "//div[@class='ytp-menuitem-label' and contains(text(),'10 minutes')]/..",
+      15: "//div[@class='ytp-menuitem-label' and contains(text(),'15 minutes')]/..",
+      20: "//div[@class='ytp-menuitem-label' and contains(text(),'20 minutes')]/..",
+      30: "//div[@class='ytp-menuitem-label' and contains(text(),'30 minutes')]/..",
+      45: "//div[@class='ytp-menuitem-label' and contains(text(),'45 minutes')]/..",
+      60: "//div[@class='ytp-menuitem-label' and contains(text(),'60 minutes')]/..",
+      end: "//div[contains(text(),'End of video')]/../../..",
+    },
   },
-  playback:{
-    button:"//div[@class='ytp-menuitem-label' and text()='Playback speed']",
-    menu:"//div[contains(@class, 'ytp-panel')]//span[contains(@class, 'ytp-panel-title') and text()='Playback speed']",
-    values:{
-      0.25:"//div[@class='ytp-menuitem-label' and contains(text(),'0.25')]/..",
-      0.5:"//div[@class='ytp-menuitem-label' and contains(text(),'0.5')]/..",
-      0.75:"//div[@class='ytp-menuitem-label' and contains(text(),'0.75')]/..",
-      Normal:"//div[@class='ytp-menuitem-label' and contains(text(),'Normal')]/..",
-      1.25:"//div[@class='ytp-menuitem-label' and contains(text(),'1.25')]/..",
-      1.5:"//div[@class='ytp-menuitem-label' and contains(text(),'1.5')]/..",
-      1.75:"//div[@class='ytp-menuitem-label' and contains(text(),'1.75')]/..",
-      2:"//div[@class='ytp-menuitem-label' and contains(text(),'2')]/..",
-    }
-  }
+  playback: {
+    button: "//div[@class='ytp-menuitem-label' and text()='Playback speed']",
+    menu: "//div[contains(@class, 'ytp-panel')]//span[contains(@class, 'ytp-panel-title') and text()='Playback speed']",
+    values: {
+      normal:
+        "//button[contains(@class, 'ytp-variable-speed-panel-button')]//span[text()='1.0']/..",
+      1.25: "//button[contains(@class, 'ytp-variable-speed-panel-button')]//span[text()='1.25']/..",
+      1.5: "//button[contains(@class, 'ytp-variable-speed-panel-button')]//span[text()='1.5']/..",
+      2: "//button[contains(@class, 'ytp-variable-speed-panel-button')]//span[text()='2.0']/..",
+    },
+    slider: "//input[contains(@class, 'ytp-input-slider') and @role='slider']",
+  },
 };
 let vidUrlPattern =
   /^https:\/\/(?:www\.)?youtube\.com\/watch\?v=[\w-]+(?:[&?][\w=-]+)*$/;
@@ -77,22 +75,23 @@ const qualities = {
   2160: 8,
 };
 
-const timers = { off: 0, 10: 1, 15:2, 20: 3, 30: 4, 45: 5, 60: 6, end: 7 };
+const timers = { off: 0, 10: 1, 15: 2, 20: 3, 30: 4, 45: 5, 60: 6, end: 7 };
 
 const playbacks = {
-  0.25: 0,
-  0.5: 1,
-  0.75: 2,
-  normal: 3,
-  1.25: 4,
-  1.5: 5,
-  1.75: 6,
-  2: 7,
+  normal: 0,
+  1.25: 1,
+  1.5: 2,
+  2: 3,
 };
 
+console.log("IN CONTENT SCRIPT");
+
 let settings = null;
+let loadingSettings = false;
 let skipReqInProgress = false;
 let reqCount = 0;
+
+let currentUrl = location.href;
 
 //TODO: Handle ads that appear in the middle of a video
 /**
@@ -104,19 +103,32 @@ function clickSkipBtn() {
     document,
     null,
     XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
+    null,
   ).singleNodeValue;
-  if (node !== null && node !== undefined && !skipReqInProgress) {
+  if (node !== null && node !== undefined) {
+    const rect = node.getBoundingClientRect();
+    console.log("skip btn found: ", node);
+    try {
+      node.click();
+    } catch (err) {
+      console.log("skip button click content err: ", err);
+    }
     reqCount++;
     skipReqInProgress = true;
     chrome.runtime
-      .sendMessage({ event: "skipAd", reqCount: reqCount })
-      .then((res) => {
+      .sendMessage({
+        event: "skipAd",
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+        reqCount: reqCount,
       })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
         skipReqInProgress = false;
       });
+  } else {
+    console.log("skip btn not found: ", node);
   }
 }
 
@@ -129,7 +141,7 @@ function handleAutoplayBtn() {
     document,
     null,
     XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
+    null,
   ).singleNodeValue;
 
   if (node !== null && node !== undefined) {
@@ -155,10 +167,12 @@ function handleVideoScreenSize() {
     document,
     null,
     XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
+    null,
   ).singleNodeValue;
   //get theater mode button attributes
-  const theaterNodeTitle = theaterModeNode.getAttribute("title").toLowerCase();
+  const theaterNodeTitle = theaterModeNode
+    .getAttribute("data-tooltip-title")
+    .toLowerCase();
   const theaterNodeTitleNoTooltip = theaterModeNode
     .getAttribute("data-title-no-tooltip")
     .toLowerCase();
@@ -168,10 +182,12 @@ function handleVideoScreenSize() {
     document,
     null,
     XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
+    null,
   ).singleNodeValue;
   //get full screen button attributes
-  const fullNodeTitle = fullModeNode.getAttribute("title").toLowerCase();
+  const fullNodeTitle = fullModeNode
+    .getAttribute("data-tooltip-title")
+    .toLowerCase();
   const fullNodeTitleNoTooltip = fullModeNode
     .getAttribute("data-title-no-tooltip")
     .toLowerCase();
@@ -276,7 +292,7 @@ function handlePremiumPopup() {
       document,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
+      null,
     ).singleNodeValue;
     if (dismissBtn !== null && dismissBtn !== undefined) {
       dismissBtn.click();
@@ -294,20 +310,35 @@ function clickSettingsBtn() {
     document,
     null,
     XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
+    null,
   ).singleNodeValue;
-  if (btn !== null && btn !== undefined) {
+  if (
+    btn !== null &&
+    btn !== undefined &&
+    btn.getAttribute("aria-expanded") === "false"
+  ) {
     btn.click();
-    btn.blur();``
+    btn.blur();
+    ``;
   }
 }
 
 /**
  * Function to click the settings button if the settings menu is still open.
  */
-function closeSettingsMenu(){
-  const btn = document.evaluate(xpaths.settingsBtn, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-  if(btn!==null && btn!==undefined && btn.getAttribute('aria-expanded')!==null && btn.getAttribute('aria-expanded')!==undefined && btn.getAttribute('aria-expanded')==="true" && btn.getAttribute('aria-expanded')!=="false"){
+function closeSettingsMenu() {
+  const btn = document.evaluate(
+    xpaths.settingBtn,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null,
+  ).singleNodeValue;
+  if (
+    btn !== null &&
+    btn !== undefined &&
+    btn.getAttribute("aria-expanded") === "true"
+  ) {
     btn.click();
   }
 }
@@ -323,7 +354,7 @@ function handleAnnotations() {
     document,
     null,
     XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
+    null,
   ).singleNodeValue;
   const annotationsState =
     annotationsParent !== null && annotationsParent !== undefined
@@ -345,7 +376,7 @@ function handleAnnotations() {
       document,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
+      null,
     ).singleNodeValue;
     annotationsBtn.click();
   }
@@ -363,7 +394,7 @@ function handleAmbientMode() {
     document,
     null,
     XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
+    null,
   ).singleNodeValue;
   const ambientModeState =
     ambientModeParent !== null && ambientModeParent !== undefined
@@ -385,170 +416,262 @@ function handleAmbientMode() {
       document,
       null,
       XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
+      null,
     ).singleNodeValue;
     ambientModeBtn.click();
   }
-  clickSettingsBtn(); //closing the settings button
+  closeSettingsMenu(); //closing the settings button
 }
 
 /**
  * Funtion to handle quality according to preference
  */
-function handleQuality(){
+function handleQuality() {
   //click settings button
   clickSettingsBtn();
-  const qualityBtn = document.evaluate(xpaths.quality.button, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  const qualityBtn = document.evaluate(
+    xpaths.quality.button,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null,
+  ).singleNodeValue;
   let inQuality = false;
   //determine if qualityBtn is clicked
-  if(qualityBtn!==null && qualityBtn!==undefined){
+  if (qualityBtn !== null && qualityBtn !== undefined) {
     qualityBtn.click();
-    inQuality=true;
+    inQuality = true;
   }
   //if btn clicked
-  if(inQuality){
+  if (inQuality) {
     //determine if quality menu appears
-    const qualityMenu = document.evaluate(xpaths.quality.menu, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    const qualityMenu = document.evaluate(
+      xpaths.quality.menu,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null,
+    ).singleNodeValue;
     //if quality menu appears
-    if(qualityMenu!==null && qualityMenu!==undefined){
+    if (qualityMenu !== null && qualityMenu !== undefined) {
       let qualitySet = false; //if we have already set quality
       let qualityValue = settings.quality; //value from qualities obj
       //while we have not set quality
-      while(qualitySet!==true){
+      while (qualitySet !== true) {
         //get preference through quality value and button
-        const qualityPreference = Object.keys(qualities).find(key=>qualities[key]==qualityValue);
-        const qualityPreferenceBtn = document.evaluate(xpaths.quality.values[qualityPreference], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        const qualityPreference = Object.keys(qualities).find(
+          (key) => qualities[key] == qualityValue,
+        );
+        const qualityPreferenceBtn = document.evaluate(
+          xpaths.quality.values[qualityPreference],
+          document,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE,
+          null,
+        ).singleNodeValue;
         //if button not found, decrease quality
-        if(qualityPreferenceBtn===null || qualityPreferenceBtn===undefined){
-          qualityValue-=1;
+        if (
+          qualityPreferenceBtn === null ||
+          qualityPreferenceBtn === undefined
+        ) {
+          qualityValue -= 1;
           continue;
         }
         //if quality is already equal to preference
-        if(qualityPreferenceBtn.getAttribute('aria-checked')==="true"){
+        if (qualityPreferenceBtn.getAttribute("aria-checked") === "true") {
           qualitySet = true;
-          continue
+          continue;
         }
         //set quality if quality is not equal to preference
-        else if(qualityPreferenceBtn.getAttribute('aria-checked')==="false"){
+        else if (
+          qualityPreferenceBtn.getAttribute("aria-checked") === "false"
+        ) {
           qualityPreferenceBtn.click();
           qualitySet = true;
           continue;
         }
-      }      
+      }
     }
   }
   //close settings button
-  clickSettingsBtn()
+  closeSettingsMenu();
 }
 
 /**
  * Function to handle sleep timer according to preferences
  */
-function handleTimer(){
+function handleTimer() {
   //open settings menu
   clickSettingsBtn();
   //timer button
-  const timerBtn = document.evaluate(xpaths.sleepTimer.button, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  const timerBtn = document.evaluate(
+    xpaths.sleepTimer.button,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null,
+  ).singleNodeValue;
   let inTimer = false;
   //if timer button clicked, flag up
-  if(timerBtn!==null && timerBtn!==undefined){
+  if (timerBtn !== null && timerBtn !== undefined) {
     timerBtn.click();
     inTimer = true;
   }
   //if flag up
-  if(inTimer){
+  if (inTimer) {
     //determine if the timer menu is open
-    const timerMenu = document.evaluate(xpaths.sleepTimer.menu, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    const timerMenu = document.evaluate(
+      xpaths.sleepTimer.menu,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null,
+    ).singleNodeValue;
     //if menu is open
-    if(timerMenu!==null && timerMenu!==undefined){
+    if (timerMenu !== null && timerMenu !== undefined) {
       let timerValue = settings.timer;
       //get timerPreference
-      const timerPreference = Object.keys(timers).find(timer=>timers[timer]==timerValue);
+      const timerPreference = Object.keys(timers).find(
+        (timer) => timers[timer] == timerValue,
+      );
       //get button for preference
-      const timerPreferenceBtn = document.evaluate(xpaths.sleepTimer.values[timerPreference], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-      if(timerPreferenceBtn!==null && timerPreferenceBtn!==undefined && timerPreferenceBtn.getAttribute('aria-checked')!==null && timerPreferenceBtn.getAttribute("aria-checked")!==undefined && timerPreferenceBtn.getAttribute('aria-checked')==="false" && timerPreferenceBtn.getAttribute('aria-checked')!=="true"){
+      const timerPreferenceBtn = document.evaluate(
+        xpaths.sleepTimer.values[timerPreference],
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null,
+      ).singleNodeValue;
+      if (
+        timerPreferenceBtn !== null &&
+        timerPreferenceBtn !== undefined &&
+        timerPreferenceBtn.getAttribute("aria-checked") !== null &&
+        timerPreferenceBtn.getAttribute("aria-checked") !== undefined &&
+        timerPreferenceBtn.getAttribute("aria-checked") === "false" &&
+        timerPreferenceBtn.getAttribute("aria-checked") !== "true"
+      ) {
         timerPreferenceBtn.click();
       }
     }
   }
   //close settings menu
-  clickSettingsBtn();
+  closeSettingsMenu();
 }
 
-function handlePlayback(){
+function handlePlayback() {
   //click settings btn
   clickSettingsBtn();
-  const playbackBtn = document.evaluate(xpaths.playback.button, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  const playbackBtn = document.evaluate(
+    xpaths.playback.button,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null,
+  ).singleNodeValue;
   let inPlayback = false;
   //if playback button clicked, flag up
-  if(playbackBtn!==null && playbackBtn!==undefined){
+  console.log("playback button:", playbackBtn);
+  if (playbackBtn !== null && playbackBtn !== undefined) {
     playbackBtn.click();
     inPlayback = true;
   }
+  console.log("inPlayback:", inPlayback);
   //if flag up
-  if(inPlayback){
+  if (inPlayback) {
     //determine if the playback menu is open
-    const playbackMenu = document.evaluate(xpaths.playback.menu, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    const playbackMenu = document.evaluate(
+      xpaths.playback.menu,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null,
+    ).singleNodeValue;
     //if menu is open
-    if(playbackMenu!==null && playbackMenu!==undefined){
+    if (playbackMenu !== null && playbackMenu !== undefined) {
       let playbackValue = settings.playback;
       //get playback preference
-      const playbackPreference = Object.keys(playbacks).find(key=>playbacks[key]===playbackValue);
+      const playbackPreference = Object.keys(playbacks).find(
+        (key) => playbacks[key] === playbackValue,
+      );
       //get button for preference
-      const playbackPreferenceBtn = document.evaluate(xpaths.playback.values[playbackPreference], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-      if(playbackPreferenceBtn!==null && playbackPreferenceBtn!==undefined && playbackPreferenceBtn.getAttribute("aria-checked")!==null && playbackPreferenceBtn.getAttribute("aria-checked")!==undefined && playbackPreferenceBtn.getAttribute("aria-checked")==="false" && playbackPreferenceBtn.getAttribute("aria-checked")!=="true"){
+      console.log(
+        "playback pref:",
+        playbackPreference,
+        xpaths.playback.values[playbackPreference],
+      );
+      const playbackPreferenceBtn = document.evaluate(
+        xpaths.playback.values[playbackPreference],
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null,
+      ).singleNodeValue;
+      const playbackSlider = document.evaluate(
+        xpaths.playback.slider,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null,
+      ).singleNodeValue;
+      console.log("playback pref button:", playbackPreferenceBtn);
+      if (
+        playbackPreferenceBtn !== null &&
+        playbackPreferenceBtn !== undefined &&
+        playbackSlider !== null &&
+        playbackSlider !== undefined &&
+        playbackSlider.getAttribute("aria-valuenow") !== null &&
+        playbackSlider.getAttribute("aria-valuenow") !== undefined &&
+        playbackSlider.getAttribute("aria-valuenow") !== `${playbackPreference}`
+      ) {
         playbackPreferenceBtn.click();
+        console.log("playback pref button clicked");
       }
     }
   }
   //close settings button
-  clickSettingsBtn();
+  closeSettingsMenu();
 }
 
 /**
  * Callback function for MutationObserver which handles all preference DOM change.
  * @param {*} mutationsList parameter supplied by MutationObserver
  */
-function handleAllPreferences(mutationsList) {
-  //checking that skipAd button has appeared
-  if (vidUrlPattern.test(location.href) && settings!==null) {
-    if (settings.skipAd === true) {
-      clickSkipBtn();
-    }
-    //handling autoplay
-    handleAutoplayBtn();
-    //handling video screen size
-    handleVideoScreenSize();
-    //handle premium popup
-    handlePremiumPopup();
-    //handle annotations
-    handleAnnotations();
-    //handle ambient mode
-    handleAmbientMode();
-    //handle quality
-    handleQuality();
-    //handle sleep timer
-    handleTimer();
-    //handle playback
-    handlePlayback();
-    //close settings if still open
-    closeSettingsMenu();
+function handleAllPreferences() {
+  if (!vidUrlPattern.test(location.href)) return;
+
+  if (!settings) {
+    loadSettings();
+    return;
   }
+
+  if (settings.skipAd) {
+    clickSkipBtn();
+  }
+
+  handleAutoplayBtn();
+  handleVideoScreenSize();
+  handlePremiumPopup();
+  handleAnnotations();
+  handlePlayback();
+  handleQuality();
+  handleTimer();
+  handleAmbientMode();
+  closeSettingsMenu();
 }
 
 /**
  * Function to handle preferences excluding skip Ad
  */
 function handlePreferencesOnSpecialOccasions() {
-  if(settings!==null){
+  if (settings !== null) {
     handleAutoplayBtn();
     handleVideoScreenSize();
     handlePremiumPopup();
     handleAnnotations();
-    handleAmbientMode();
+    handlePlayback();
     handleQuality();
     handleTimer();
-    handlePlayback();
+    handleAmbientMode();
     closeSettingsMenu();
   }
 }
@@ -564,33 +687,74 @@ const vidObserver = new MutationObserver(() => {
     handlePreferencesOnSpecialOccasions();
   }
 });
+
+const observer = new MutationObserver(() => {
+  if (location.href !== currentUrl) {
+    currentUrl = location.href;
+
+    settings = null;
+
+    loadSettings();
+  }
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true,
+});
+
 const vidElement = document.querySelector("video");
 const vidObserverConfig = { childList: true, subtree: true, attributes: true };
 if (vidElement) {
   vidObserver.observe(vidElement, vidObserverConfig);
 }
 
-if(vidUrlPattern.test(location.href)){
-  chrome.runtime.sendMessage({action:"askSettings"}).then((res)=>{
-    if(res.settings!==null && res.settings!==undefined){
-      settings = res.settings;
-    }
-  })
-  .catch((err)=>{console.log(err);
-  })
+if (vidUrlPattern.test(location.href)) {
+  loadSettings();
+}
+
+async function loadSettings() {
+  if (loadingSettings || settings) return;
+
+  loadingSettings = true;
+
+  try {
+    const res = await chrome.runtime.sendMessage({
+      action: "askSettings",
+    });
+
+    settings = res.settings;
+
+    handlePreferencesOnSpecialOccasions();
+  } finally {
+    loadingSettings = false;
+  }
 }
 
 //receiving the message that ad has been skipped
 chrome.runtime.onMessage.addListener((request, response, sendResponse) => {
-  if (request.msg === "adSkipped" ) {
+  if (request.msg === "adSkipped") {
     skipReqInProgress = false;
     handlePreferencesOnSpecialOccasions();
   }
 });
 
-//receiving settings from service worker
-chrome.runtime.onMessage.addListener((request, response, sendResponse)=>{
-  if(request.action==="sendSettings"){
-    settings = request.settings;
+// //receiving settings from service worker
+// chrome.runtime.onMessage.addListener((request, response, sendResponse) => {
+//   if (request.action === "sendSettings") {
+//     settings = request.settings;
+//   }
+// });
+
+chrome.runtime.onMessage.addListener((request) => {
+  switch (request.action) {
+    case "sendSettings":
+      settings = request.settings;
+
+      if (vidUrlPattern.test(location.href)) {
+        handlePreferencesOnSpecialOccasions();
+      }
+
+      break;
   }
-})
+});

@@ -5,15 +5,17 @@
     "description": "A chrome extension to manage your preferences for YouTube videos.",
     "content_scripts": [{
         "matches": ["https://www.youtube.com/*"],
-        "js": ["./app/content-script.js"],
-        "type": "module"
+        "js": ["./app/content-script.js"]
     }],
+    "host_permissions": [
+        "https://www.youtube.com/*"
+    ],
     "action": {
         "default_popup": "./app/index.html"
     },
-    "permissions":["tabs", "debugger","activeTab", "storage", "activeTab"],
-    "background":{
-        "service_worker":"./service/service-worker.js",
-        "type":"module"
+    "permissions": ["tabs", "debugger", "activeTab", "storage", "scripting"],
+    "background": {
+        "service_worker": "./service/service-worker.js",
+        "type": "module"
     }
 }
