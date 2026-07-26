@@ -36,25 +36,18 @@ const timers = {
 };
 
 const playbacks = {
-  0.25: 0,
-  0.5: 1,
-  0.75: 2,
-  normal: 3,
-  1.25: 4,
-  1.5: 5,
-  1.75: 6,
-  2: 7,
+  normal: 0,
+  1.25: 1,
+  1.5: 2,
+  2: 3,
 };
 
 const defaultSettings = {
-  skipAd: true,
-  autoplay: false,
-  screenMode: screenModes.full,
+  autoplay: true,
+  screenMode: screenModes.normal,
   dismissPremiumPopup: false,
-  annotations: true,
   ambientMode: true,
-  quality: qualities[1080],
-  timer: timers.off,
+  quality: qualities.auto,
   playback: playbacks.normal,
 };
 
@@ -185,7 +178,7 @@ export default function App() {
             options={[
               { label: "Normal", value: 0 },
               { label: "Theater", value: 1 },
-              { label: "Full", value: 2 },
+              // { label: "Full", value: 2 },
             ]}
           />
 
