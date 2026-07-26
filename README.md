@@ -6,6 +6,18 @@ Instead of manually configuring options such as playback speed, video quality, v
 
 Built with React, Tailwind CSS, and the Chrome Extensions Manifest V3 API, the extension uses `MutationObserver`s and Chrome's messaging APIs to synchronize user preferences with YouTube's dynamically changing interface.
 
+## Demo
+
+A brief walkthrough demonstrating preference configuration, automatic synchronization with the YouTube player and persistence in the browser.
+
+[![Watch the demo](screenshots/thumbnail.png)](https://youtu.be/RlKmdlfioEo)
+
+## Screenshots
+
+| | |
+|--|--|
+| <img src="screenshots/Popup_1.png"> | <img src="screenshots/Popup_2.png"> |
+
 ## Features
 
 - Automatically apply preferred playback speed
